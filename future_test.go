@@ -7,9 +7,8 @@ import (
 )
 
 func TestFutureTask(t *testing.T) {
-	ft := NewFutureTask(func() (interface{}, error) {
+	ft := NewFutureTask(func() (bool, error) {
 		return true, nil
-
 	})
 
 	response, err := ft.Get()
@@ -18,7 +17,7 @@ func TestFutureTask(t *testing.T) {
 		t.Error("unexpected error")
 	}
 
-	if !response.(bool) {
+	if !response {
 		t.Error("unexpected response")
 	}
 
@@ -33,10 +32,10 @@ func TestFutureTask(t *testing.T) {
 }
 
 func TestFutureTaskWithBlockingResponse(t *testing.T) {
-	var futureItems []*FutureTask
+	var futureItems []*FutureTask[int]
 	for i := 0; i < 5; i++ {
-		ft := func(i int) *FutureTask {
-			return NewFutureTask(func() (interface{}, error) {
+		ft := func(i int) *FutureTask[int] {
+			return NewFutureTask(func() (int, error) {
 				time.Sleep(5 * time.Second)
 				if i == 0 {
 					return 0, errors.New("got 0")

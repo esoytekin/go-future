@@ -1,20 +1,20 @@
 package future
 
 // FutureTask type for FutureTask
-type FutureTask struct {
-	result interface{}
+type FutureTask[V any] struct {
+	result V
 	error  error
 	signal chan struct{}
 }
 
 // Get blocks current thread and waits for result
-func (t *FutureTask) Get() (interface{}, error) {
+func (t *FutureTask[V]) Get() (V, error) {
 	<-t.signal
 	return t.result, t.error
 }
 
 // IsComplete check if future task is done
-func (t *FutureTask) IsComplete() bool {
+func (t *FutureTask[V]) IsComplete() bool {
 	select {
 	case <-t.signal:
 		return true
@@ -25,13 +25,13 @@ func (t *FutureTask) IsComplete() bool {
 }
 
 // HasError check if task finished with error
-func (t *FutureTask) HasError() bool {
+func (t *FutureTask[V]) HasError() bool {
 	return t.error != nil
 }
 
 // NewFutureTask returns new *FutureTask instance
-func NewFutureTask(callback func() (interface{}, error)) *FutureTask {
-	f := new(FutureTask)
+func NewFutureTask[V any](callback func() (V, error)) *FutureTask[V] {
+	f := new(FutureTask[V])
 	f.signal = make(chan struct{})
 
 	go func() {
