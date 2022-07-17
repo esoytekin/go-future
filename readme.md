@@ -14,7 +14,7 @@ import "fmt"
 
 func main() {
 	// create new instance
-	ft := future.NewFutureTask(func() (interface{}, error) {
+	ft := future.NewFutureTask(func() (string, error) {
 		// callback implemantation details
 		return "", nil
 	})
