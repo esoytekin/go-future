@@ -30,7 +30,7 @@ func (t *FutureTask[V]) HasError() bool {
 }
 
 // NewFutureTask returns new *FutureTask instance
-func NewFutureTask[V any](callback func() (V, error)) *FutureTask[V] {
+func Start[V any](callback func() (V, error)) *FutureTask[V] {
 	f := new(FutureTask[V])
 	f.signal = make(chan struct{})
 

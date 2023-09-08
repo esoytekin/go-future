@@ -7,7 +7,7 @@ import (
 )
 
 func TestFutureTask(t *testing.T) {
-	ft := NewFutureTask(func() (bool, error) {
+	ft := Start(func() (bool, error) {
 		return true, nil
 	})
 
@@ -35,7 +35,7 @@ func TestFutureTaskWithBlockingResponse(t *testing.T) {
 	var futureItems []*FutureTask[int]
 	for i := 0; i < 5; i++ {
 		ft := func(i int) *FutureTask[int] {
-			return NewFutureTask(func() (int, error) {
+			return Start(func() (int, error) {
 				time.Sleep(5 * time.Second)
 				if i == 0 {
 					return 0, errors.New("got 0")
